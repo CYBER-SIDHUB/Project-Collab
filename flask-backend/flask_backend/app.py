@@ -1,17 +1,3 @@
-# from flask import Flask
-# from flask_cors import CORS
-
-# app = Flask(__name__)
-# CORS(app)
-
-# @app.route("/")
-# def home():
-#     return {"message": "Sending message from backend to frontend"}
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
-
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -30,6 +16,10 @@ jwt = JWTManager(app)
 
 # Mock database
 users = {}
+
+@app.route("/")
+def home():
+    return {"message": "Starting Website. Please go to login page 'http://localhost:3000/login' or register page 'http://localhost:3000/register'"}
 
 @app.route("/register", methods=["POST"])
 def register():
