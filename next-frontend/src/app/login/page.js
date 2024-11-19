@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation"; // Import useRouter hook
 import { login } from "../../store/store";
 import API from "../../utils/api";
 
@@ -9,6 +10,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const router = useRouter(); // Initialize the router
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +18,7 @@ const LoginPage = () => {
       const response = await API.post("/login", { username, password });
       dispatch(login({ user: username, token: response.data.access_token }));
       alert("Logged in successfully");
+      router.push("/dashboard"); // Redirect to dashboard
     } catch (error) {
       console.error(error);
       alert("Login failed. Please try again.");
