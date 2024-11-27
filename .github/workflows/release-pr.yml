@@ -37,7 +37,7 @@ jobs:
         run: echo "Pull Request URL ${{ steps.create_pr.outputs.pr_url }}"
 
       - name: Export PR URL
-        run: echo "${{ steps.create_pr.outputs.pr_url }}" >> $GITHUB_ENV
+        run: echo "PR_URL=${{ steps.create_pr.outputs.pr_url }}" >> $GITHUB_ENV
 
 
   notify-email:
@@ -60,5 +60,5 @@ jobs:
           from: mishra07.siddharth@gmail.com
           body: |
             The pull request for branch ${{ github.ref_name }} has been created.
-            Please review it here ${{ GITHUB_ENV }}
+            Please review it here ${{ env.PR_URL }}
 
