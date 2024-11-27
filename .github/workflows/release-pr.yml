@@ -36,9 +36,14 @@ jobs:
       - name: Log PR URL
         run: echo "Pull Request URL ${{ steps.create_pr.outputs.pr_url }}"
 
-      - name: Export PR URL
-        run: echo "PR_URL=${{ steps.create_pr.outputs.pr_url }}" >> $GITHUB_ENV
+      - name: Save PR URL to Artifact
+        run: echo "${{ steps.create_pr.outputs.pr_url }}" > pr_url.txt
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr-url
+          path: pr_url.txt
 
   notify-email:
     name: Notify PR Status via Email
@@ -46,9 +51,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug Email Inputs
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: pr-url
+
+      - name: Load PR URL
         run: |
-          echo "PR URL: ${{ env.PR_URL }}"
+          PR_URL=$(cat pr_url.txt)
+          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
+
+      - name: Debug Email Inputs
+        run: echo "PR URL ${{ env.PR_URL }}"
           
       # Step 4: Send Email Notification
       - name: Send PR Status Email
@@ -64,5 +78,5 @@ jobs:
           from: mishra07.siddharth@gmail.com
           body: |
             The pull request for branch ${{ github.ref_name }} has been created.
-            Please review it here ${{ env.PR_URL }}
+            Please review it here ${{ env.PR_URL }}.
 
