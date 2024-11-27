@@ -2,5 +2,3 @@
 #### 1. Created dev environment for project
 #### 2. Created backend login
 #### 3. Created frontend logic
-#### 4. Created dashboard logic
-#### 5. Created auth context
