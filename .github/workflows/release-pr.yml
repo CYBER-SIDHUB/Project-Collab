@@ -33,24 +33,24 @@ jobs:
           pr_body: "This pull request was created automatically by GitHub Actions."
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  notify-email:
-    name: Notify PR Status via Email
-    needs: create-pr
-    runs-on: ubuntu-latest
+  # notify-email:
+  #   name: Notify PR Status via Email
+  #   needs: create-pr
+  #   runs-on: ubuntu-latest
 
-    steps:
-      # Step 4: Send Email Notification
-      - name: Send PR Status Email
-        if: always() # This ensures the email is sent even if previous jobs fail
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "Pull Request Status"
-          to: mishra07.siddharth@gmail.com
-          from: mishra07.siddharth@gmail.com
-          content: |
-            The pull request for branch ${{ github.ref_name }} has been created.
-            Please review it here: ${{ steps.create_pr.outputs.url }}
+  #   steps:
+  #     # Step 4: Send Email Notification
+  #     - name: Send PR Status Email
+  #       if: always() # This ensures the email is sent even if previous jobs fail
+  #       uses: dawidd6/action-send-mail@v3
+  #       with:
+  #         server_address: smtp.gmail.com
+  #         server_port: 587
+  #         username: ${{ secrets.SMTP_USERNAME }}
+  #         password: ${{ secrets.SMTP_PASSWORD }}
+  #         subject: "Pull Request Status"
+  #         to: mishra07.siddharth@gmail.com
+  #         from: mishra07.siddharth@gmail.com
+  #         content: |
+  #           The pull request for branch ${{ github.ref_name }} has been created.
+  #           Please review it here: ${{ steps.create_pr.outputs.url }}
