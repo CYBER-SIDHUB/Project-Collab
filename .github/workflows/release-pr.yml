@@ -33,6 +33,9 @@ jobs:
           pr_body: "This pull request was created automatically by GitHub Actions."
           github_token: ${{ secrets.GH_PAT }}
 
+      - name: Log PR URL
+        run: echo "Pull Request URL ${{ steps.create_pr.outputs }}"
+
   notify-email:
     name: Notify PR Status via Email
     needs: create-pr
