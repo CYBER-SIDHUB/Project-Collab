@@ -14,6 +14,7 @@ const Register = () => {
       await register(username, email, password);
       alert("Registered successfully!");
     } catch (err: any) {
+      console.log(err)
       setError(err.response?.data?.error || "Registration failed");
     }
   };
