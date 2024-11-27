@@ -14,4 +14,5 @@
 #### 4. Create login and register webpages.
 #### 5. Create a Protected Route Component This component will act as a wrapper for routes that require authentication.
 #### 6. Use the Protected Route component to wrap routes that require authentication.
+#### 7. Creating working flow between /register, /login and /dhasboard pages.
 
