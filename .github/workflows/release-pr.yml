@@ -51,6 +51,7 @@ jobs:
           subject: "Pull Request Status"
           to: mishra07.siddharth@gmail.com
           from: mishra07.siddharth@gmail.com
-          content: |
-            A pull request has been created for the release branch. Please review it.
+          body: |
+            The pull request for branch ${{ github.ref_name }} has been created.
+            Please review it here: ${{ steps.create_pr.outputs.url }}
 
