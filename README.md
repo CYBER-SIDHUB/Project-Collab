@@ -1,2 +1,1 @@
 #### Code validation
-## Validate
