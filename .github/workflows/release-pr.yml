@@ -13,7 +13,7 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Log branch name
         run: echo "Current branch is ${{ github.ref_name }}"
@@ -31,7 +31,19 @@ jobs:
           destination_branch: main
           pr_title: "Merge ${{ github.ref_name }} into main"
           pr_body: "This pull request was created automatically by GitHub Actions."
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
+
+      - name: Log PR URL
+        run: echo "Pull Request URL ${{ steps.create_pr.outputs.pr_url }}"
+
+      - name: Save PR URL to Artifact
+        run: echo "${{ steps.create_pr.outputs.pr_url }}" > pr_url.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-url
+          path: pr_url.txt
 
   notify-email:
     name: Notify PR Status via Email
@@ -39,6 +51,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pr-url
+
+      - name: Load PR URL
+        run: |
+          PR_URL=$(cat pr_url.txt)
+          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
+
+      - name: Debug Email Inputs
+        run: echo "PR URL ${{ env.PR_URL }}"
+          
       # Step 4: Send Email Notification
       - name: Send PR Status Email
         if: always() # This ensures the email is sent even if previous jobs fail
@@ -51,6 +76,6 @@ jobs:
           subject: "Pull Request Status"
           to: mishra07.siddharth@gmail.com
           from: mishra07.siddharth@gmail.com
-          content: |
+          body: |
             The pull request for branch ${{ github.ref_name }} has been created.
-            Please review it here: ${{ steps.create_pr.outputs.url }}
+            Please review it here ${{ env.PR_URL }}.
