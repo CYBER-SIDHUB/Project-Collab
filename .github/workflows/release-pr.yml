@@ -56,5 +56,5 @@ jobs:
           from: mishra07.siddharth@gmail.com
           body: |
             The pull request for branch ${{ github.ref_name }} has been created.
-            Please review it here: ${{ steps.create_pr.outputs.pr_url }}
+            Please review it here ${{ steps.create_pr.outputs.pr_url }}
 
