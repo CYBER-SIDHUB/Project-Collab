@@ -3,7 +3,7 @@ name: Create PR for Release Branch
 on:
   push:
     branches:
-      - release/*
+      - main
 
 jobs:
   create-pr:
@@ -13,7 +13,7 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Log branch name
         run: echo "Current branch is ${{ github.ref_name }}"
