@@ -3,7 +3,7 @@ name: Create PR for Release Branch
 on:
   push:
     branches:
-      - release/*
+      - 'release/*'
 
 jobs:
   create-pr:
