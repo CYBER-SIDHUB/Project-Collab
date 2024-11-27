@@ -46,6 +46,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug Email Inputs
+        run: |
+          echo "PR URL: ${{ env.PR_URL }}"
+          echo "GITHUB_ENV: ${{ GITHUB_ENV }}"
       # Step 4: Send Email Notification
       - name: Send PR Status Email
         if: always() # This ensures the email is sent even if previous jobs fail
