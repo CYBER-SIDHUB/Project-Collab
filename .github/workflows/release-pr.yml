@@ -34,7 +34,7 @@ jobs:
           github_token: ${{ secrets.GH_PAT }}
 
       - name: Log PR URL
-        run: echo "Pull Request URL ${{ steps.create_pr.outputs.url }}"
+        run: echo "Pull Request URL ${{ steps.create_pr.outputs.pr_url }}"
 
   notify-email:
     name: Notify PR Status via Email
