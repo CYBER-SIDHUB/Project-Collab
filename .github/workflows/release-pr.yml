@@ -3,7 +3,8 @@ name: Create PR for Release Branch
 on:
   push:
     branches:
-      - main
+      - 'release/*'  # Intended pattern
+      - 'main'
 
 jobs:
   create-pr:
