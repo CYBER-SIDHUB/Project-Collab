@@ -5,10 +5,6 @@ on:
     branches:
       - 'release/*'
 
-permissions:
-  pull-requests: write
-  contents: read
-
 jobs:
   create-pr:
     name: Create Pull Request
@@ -35,7 +31,7 @@ jobs:
           destination_branch: main
           pr_title: "Merge ${{ github.ref_name }} into main"
           pr_body: "This pull request was created automatically by GitHub Actions."
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
 
   notify-email:
     name: Notify PR Status via Email
