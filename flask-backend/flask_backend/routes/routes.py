@@ -1,5 +1,6 @@
+from datetime import datetime
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from bson.objectid import ObjectId
 from ..utils.auth import hash_password, check_password
 
@@ -77,5 +78,46 @@ def register_routes(app, mongo):
             user["_id"] = str(user["_id"])
 
         return jsonify(users), 200
+    
+    @api.route('/projects', methods=['POST'])
+    @jwt_required()
+    def create_project():
+        """Create a new project."""
+        user_email = get_jwt_identity()
+        data = request.get_json()
+        project = {
+            "name": data.get("name"),
+            "description": data.get("description"),
+            "owner": user_email,
+            "created_at": datetime.now(),
+            "tasks": []  # Placeholder for tasks or phases
+        }
+        result = mongo.db.projects.insert_one(project)
+        return jsonify({"message": "Project created", "project_id": str(result.inserted_id)}), 201
+
+    @api.route('/projects', methods=['GET'])
+    @jwt_required()
+    def get_projects():
+        """Fetch all projects for the logged-in user."""
+        user_email = get_jwt_identity()
+        projects = mongo.db.projects.find({"owner": user_email})
+        projects_list = [{"id": str(project["_id"]), "name": project["name"], "description": project["description"]} for project in projects]
+        return jsonify(projects_list), 200
+
+    @api.route('/projects/<string:project_id>', methods=['GET'])
+    @jwt_required()
+    def get_project_details(project_id):
+        """Fetch details of a specific project."""
+        user_email = get_jwt_identity()
+        project = mongo.db.projects.find_one({"_id": ObjectId(project_id), "owner": user_email})
+        if not project:
+            return jsonify({"error": "Project not found or unauthorized"}), 404
+        project_details = {
+            "id": str(project["_id"]),
+            "name": project["name"],
+            "description": project["description"],
+            "tasks": project.get("tasks", [])
+        }
+        return jsonify(project_details), 200
 
     app.register_blueprint(api, url_prefix='/api')
