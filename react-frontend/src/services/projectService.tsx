@@ -8,3 +8,10 @@ export const fetchProjects = async (token: string) => {
     });
     return response.data;
 };
+
+export const fetchProjectDetails = async (token: string, projectId: string) => {
+    const response = await axios.get(`${API_URL}/api/projects/${projectId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+};

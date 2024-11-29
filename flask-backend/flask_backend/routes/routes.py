@@ -114,12 +114,16 @@ def register_routes(app, mongo):
         """Fetch details of a specific project."""
         user_email = get_jwt_identity()
         project = mongo.db.projects.find_one({"_id": ObjectId(project_id), "owner": user_email})
+
         if not project:
             return jsonify({"error": "Project not found or unauthorized"}), 404
+        
         project_details = {
             "id": str(project["_id"]),
             "name": project["name"],
             "description": project["description"],
+            "owner": project["owner"],
+            "created_at": project['created_at'],
             "tasks": project.get("tasks", [])
         }
         return jsonify(project_details), 200

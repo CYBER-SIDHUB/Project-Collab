@@ -1,13 +1,7 @@
-#### Step-by-Step Plan
+#### Step 7: Viewing Project Details
 
-#### Set up the Backend for Whiteboard Data
-##### 1. Add a new route in the Flask backend to manage whiteboard data (create, update, fetch, delete).
-##### 2. Store whiteboard data in MongoDB as JSON objects.
+#### In this step, you will enable users to click on a project in the dashboard and view its detailed information on a separate page. This involves:
 
-#### Set up the Frontend for the Whiteboard
-##### 1. Use a library like react-sketch-canvas for drawing capabilities.
-##### 2. Add buttons for saving and clearing the whiteboard.
-
-#### Integrate the Whiteboard with the Backend
-##### 1. Fetch existing whiteboard data when a user opens the whiteboard.
-##### 2. Save changes to the whiteboard to the backend.
+##### 1. Adding a route and page for project details in the frontend.
+##### 2. Creating a backend API to fetch a single project by ID.
+##### 3. Integrating the frontend with the backend to display project details dynamically.
