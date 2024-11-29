@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { error } from "console";
 
 // Define a type for the project object
 interface Project {
@@ -11,7 +12,7 @@ interface Project {
 }
 
 const Dashboard = () => {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]); // Explicitly type the state
   const [newProject, setNewProject] = useState({ name: "", description: "" });
   const [selectedProject, setSelectedProject] = useState<Project | null>(null); // Type for selectedProject
@@ -56,9 +57,20 @@ const Dashboard = () => {
     }
   };
 
+  const hideProjectDetails = async() => {
+    try {
+      setSelectedProject(null); // Assume API returns a single project object
+    } catch (error) {
+      console.error("Error hiding project details:", error);
+    }
+  }
+
   return (
     <div>
-      <h1>Dashboard</h1>
+      <header>
+          <h1>Dashboard</h1>
+          <button onClick={logout}>Logout</button>
+      </header>
       {/* Create Project Form */}
       <div>
         <input
@@ -79,9 +91,11 @@ const Dashboard = () => {
       <div>
         {projects.map((project) => (
           <div key={project.id}>
-            <h2>{project.name}</h2>
-            <p>{project.description}</p>
+            <h2>Projects:</h2>
+            <ul><h3>{project.name}</h3></ul>
+            {/* <p>{project.description}</p> */}
             <button onClick={() => viewProjectDetails(project.id)}>View Details</button>
+            <button onClick={() => hideProjectDetails()}>Hide Details</button>
           </div>
         ))}
       </div>
@@ -89,7 +103,8 @@ const Dashboard = () => {
       {/* Project Details */}
       {selectedProject && (
         <div>
-          <h2>{selectedProject.name}</h2>
+          <h2>Project Name:</h2>
+          <h3>{selectedProject.name}</h3>
           <p>{selectedProject.description}</p>
           <h3>Tasks:</h3>
           {selectedProject.tasks && selectedProject.tasks.length > 0 ? (
