@@ -85,6 +85,10 @@ def register_routes(app, mongo):
         """Create a new project."""
         user_email = get_jwt_identity()
         data = request.get_json()
+
+        if not data.get("name"):
+            return jsonify({"error": "Project name is required"}), 400
+    
         project = {
             "name": data.get("name"),
             "description": data.get("description"),
