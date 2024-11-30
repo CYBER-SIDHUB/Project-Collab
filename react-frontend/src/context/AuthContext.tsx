@@ -15,7 +15,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true); // Loading state to avoid premature redirection
-  console.log(import.meta.env)
+  // console.log(import.meta.env)
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

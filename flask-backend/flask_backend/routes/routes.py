@@ -114,14 +114,50 @@ def register_routes(app, mongo):
         """Fetch details of a specific project."""
         user_email = get_jwt_identity()
         project = mongo.db.projects.find_one({"_id": ObjectId(project_id), "owner": user_email})
+        print(f"Project ID: {project_id}")
         if not project:
             return jsonify({"error": "Project not found or unauthorized"}), 404
+        
         project_details = {
             "id": str(project["_id"]),
             "name": project["name"],
             "description": project["description"],
+            "owner": project["owner"],
+            "created_at": project['created_at'],
             "tasks": project.get("tasks", [])
         }
         return jsonify(project_details), 200
+    
+    @api.route('/projects/<string:project_id>', methods=['PUT'])
+    @jwt_required()
+    def update_project(project_id):
+        user_email = get_jwt_identity()
+        data = request.get_json()
+        print(f"Project ID: {project_id}")
+        updated_project = mongo.db.projects.find_one_and_update(
+            {"_id": ObjectId(project_id), "owner": user_email},
+            {"$set": {"name": data.get("name"), "description": data.get("description")}},
+            return_document=True
+        )
+
+        if not updated_project:
+            return jsonify({"error": "Project not found or access denied"}), 404
+
+        updated_project["_id"] = str(updated_project["_id"])
+        return jsonify(updated_project), 200
+    
+    @api.route('/projects/<string:project_id>', methods=['DELETE'])
+    @jwt_required()
+    def delete_project(project_id):
+        user_email = get_jwt_identity()
+        print(f"Project ID: {project_id}")
+        result = mongo.db.projects.delete_one(
+            {"_id": ObjectId(project_id), "owner": user_email}
+        )
+
+        if result.deleted_count == 0:
+            return jsonify({"error": "Project not found or access denied"}), 404
+
+        return jsonify({"message": "Project deleted successfully"}), 200
 
     app.register_blueprint(api, url_prefix='/api')

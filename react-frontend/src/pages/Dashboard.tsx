@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import { error } from "console";
+import { Link } from "react-router-dom";
 
 // Define a type for the project object
 interface Project {
@@ -15,7 +15,7 @@ const Dashboard = () => {
   const { token, logout } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]); // Explicitly type the state
   const [newProject, setNewProject] = useState({ name: "", description: "" });
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null); // Type for selectedProject
+  // const [selectedProject, setSelectedProject] = useState<Project | null>(null); // Type for selectedProject
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -46,30 +46,30 @@ const Dashboard = () => {
     }
   };
 
-  const viewProjectDetails = async (projectId: string) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/projects/${projectId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSelectedProject(response.data); // Assume API returns a single project object
-    } catch (error) {
-      console.error("Error fetching project details:", error);
-    }
-  };
+  // const viewProjectDetails = async (projectId: string) => {
+  //   try {
+  //     const response = await axios.get(`${API_URL}/api/projects/${projectId}`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     setSelectedProject(response.data); // Assume API returns a single project object
+  //   } catch (error) {
+  //     console.error("Error fetching project details:", error);
+  //   }
+  // };
 
-  const hideProjectDetails = async() => {
-    try {
-      setSelectedProject(null); // Assume API returns a single project object
-    } catch (error) {
-      console.error("Error hiding project details:", error);
-    }
-  }
+  // const hideProjectDetails = async () => {
+  //   try {
+  //     setSelectedProject(null); // Assume API returns a single project object
+  //   } catch (error) {
+  //     console.error("Error hiding project details:", error);
+  //   }
+  // }
 
   return (
     <div>
       <header>
-          <h1>Dashboard</h1>
-          <button onClick={logout}>Logout</button>
+        <h1>Dashboard</h1>
+        <button onClick={logout}>Logout</button>
       </header>
       {/* Create Project Form */}
       <div>
@@ -89,18 +89,24 @@ const Dashboard = () => {
 
       {/* Project List */}
       <div>
+      <h2>Projects:</h2>
         {projects.map((project) => (
           <div key={project.id}>
-            <h2>Projects:</h2>
-            <ul><h3>{project.name}</h3></ul>
+            <ul>
+                {/* {projects.map((project) => (
+                    <li key={project.id}> */}
+                        <Link to={`/projects/${project.id}`}>{project.name}</Link>
+                    {/* </li>
+                ))} */}
+            </ul>
             {/* <p>{project.description}</p> */}
-            <button onClick={() => viewProjectDetails(project.id)}>View Details</button>
-            <button onClick={() => hideProjectDetails()}>Hide Details</button>
+            {/* <button onClick={() => viewProjectDetails(project.id)}>View Details</button>
+            <button onClick={() => hideProjectDetails()}>Hide Details</button> */}
           </div>
         ))}
       </div>
 
-      {/* Project Details */}
+      {/* Project Details
       {selectedProject && (
         <div>
           <h2>Project Name:</h2>
@@ -117,7 +123,8 @@ const Dashboard = () => {
             <p>No tasks yet.</p>
           )}
         </div>
-      )}
+      )} */}
+
     </div>
   );
 };
