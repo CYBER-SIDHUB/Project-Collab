@@ -15,3 +15,16 @@ export const fetchProjectDetails = async (token: string, projectId: string) => {
     });
     return response.data;
 };
+
+export const updateProject = async (token: string, projectId: string | undefined, projectData: any) => {
+    const response = await axios.put(`${API_URL}/api/projects/${projectId}`, projectData, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+};
+
+export const deleteProject = async (token: string, projectId: string | undefined) => {
+    await axios.delete(`${API_URL}/api/projects/${projectId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+};
